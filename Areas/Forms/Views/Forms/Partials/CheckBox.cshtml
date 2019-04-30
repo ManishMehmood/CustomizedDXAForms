@@ -1,0 +1,53 @@
+﻿@model FormFieldModel
+
+<div class="group">
+    @* Add ability to control horizonal or vertical rendering *@
+    <label for="@Model.Name">@Model.Label</label>
+    @{
+        Dictionary<string, object> htmlAttributes = new Dictionary<string, object>();
+        htmlAttributes.Add("data-val", "true");
+
+        if (Model.Required == "Yes")
+        {
+            htmlAttributes.Add("data-val-required", Model.RequiredError);
+        }
+    }
+
+    @*@Html.CheckBox(@Model.Name, false, htmlAttributes);*@
+    <input type="hidden" name="@Model.Name" value="false" />
+    @if (Model.OptionsCategoryList != null && Model.OptionsCategoryList.Count > 0)
+    {
+        foreach (var item in Model.OptionsCategoryList)
+        {
+
+            <div class="checkbox">
+                <span class="highlight"></span>
+                <span class="bar"></span>
+                <label>
+                    <input type="checkbox" name="@Model.Name" value="@item.Value" @(Model.Values.Contains(item.Value) ? "checked " : "") data-val="true" data-val-mandatory="Please select something" />
+                    @item.DisplayText
+                </label>
+            </div>
+        }
+    }
+    else
+    {
+        foreach (var item in Model.Options)
+        {
+
+            <div class="checkbox">
+                <span class="highlight"></span>
+                <span class="bar"></span>
+                <label>
+                    <input type="checkbox" name="@Model.Name" value="@item" @(Model.Values.Contains(item) ? "checked " : "") data-val="true" data-val-mandatory="Please select something" />
+                    @item
+                </label>
+            </div>
+        }
+    }
+
+
+    @Html.ValidationMessageCustom(Model.Name)
+    
+</div>
+

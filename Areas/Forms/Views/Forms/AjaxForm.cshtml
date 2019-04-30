@@ -1,0 +1,46 @@
+﻿@using System.Web.Mvc.Ajax
+
+@model AjaxFormModel
+
+<div id="form">
+    @using (Ajax.BeginForm("ProcessAjaxForm", "Forms", new AjaxOptions { UpdateTargetId = "form" }))
+    {
+
+    @Html.AntiForgeryToken()
+    <h1>@Model.Heading</h1>
+    <p>@Html.DxaRichText(Model.Subheading)</p>
+
+    foreach (var field in Model.FormFields)
+    {
+
+        switch (field.FieldType)
+        {
+            case FieldType.Text:
+                @Html.Partial("Partials/Text", field);
+                break;
+
+            case FieldType.TextArea:
+                @Html.Partial("Partials/TextArea", field);
+                break;
+
+            case FieldType.DropDown:
+                @Html.Partial("Partials/DropDown", field);
+                break;
+
+            case FieldType.CheckBox:
+                @Html.Partial("Partials/CheckBox", field);
+                break;
+
+            case FieldType.RadioButton:
+                @Html.Partial("Partials/RadioButton", field);
+                break;
+
+            case FieldType.Date:
+                @Html.Partial("Partials/Date", field);
+                break;
+        }
+    }
+    <input type="hidden" name="formId" value="@Model.Id" />
+    <button type="submit" class="btn btn-default">@Model.SubmitButtonLabel</button>
+    }
+</div>

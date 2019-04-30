@@ -1,0 +1,40 @@
+﻿@model FormFieldModel
+
+<div class="group">
+
+
+    @{
+        var rows = Model.Width != null ? Model.Width : "5";
+        Dictionary<string, object> htmlAttributes = new Dictionary<string, object>();
+        htmlAttributes.Add("rows", rows);
+        // htmlAttributes.Add("placeholder", Model.Label);
+        htmlAttributes.Add("class", "notes");
+        htmlAttributes.Add("data-val", "true");
+
+        if (Model.Required == "Yes")
+        {
+            htmlAttributes.Add("data-val-required", Model.RequiredError);
+        }
+
+        if (!string.IsNullOrEmpty(Model.ValidationRegex))
+        {
+            htmlAttributes.Add("data-val-regex-pattern", Model.ValidationRegex);
+            htmlAttributes.Add("data-val-regex", Model.ValidationError);
+        }
+
+    }
+
+    @Html.TextArea(Model.Name, Model.Value, htmlAttributes)
+    <span class="highlight"></span>
+    <span class="barfull"></span>
+    <label for="@Model.Name">@Model.Label</label>
+
+    @Html.ValidationMessageCustom(Model.Name)
+</div>
+
+
+
+
+
+
+

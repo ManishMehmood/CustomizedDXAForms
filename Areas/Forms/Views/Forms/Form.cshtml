@@ -1,0 +1,66 @@
+﻿@model FormModel
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form">
+        <h1>@Model.Heading</h1>
+        <p>@Html.DxaRichText(Model.Subheading)</p>
+    
+        @foreach (var field in Model.FormFields)
+        {
+
+            switch (field.FieldType)
+            {
+                case FieldType.Text:
+                    @Html.Partial("Partials/Text", field);
+                    break;
+
+                case FieldType.TextArea:
+                    @Html.Partial("Partials/TextArea", field);
+                    break;
+
+                case FieldType.DropDown:
+                    @Html.Partial("Partials/DropDown", field);
+                    break;
+
+                case FieldType.CheckBox:
+                    @Html.Partial("Partials/CheckBox", field);
+                    break;
+
+                case FieldType.RadioButton:
+                    @Html.Partial("Partials/RadioButton", field);
+                    break;
+
+                case FieldType.Date:
+                    @Html.Partial("Partials/Date", field);
+                    break;
+            }
+        }
+
+        <button type="submit" class="btn btn-default">@Model.SubmitButtonLabel</button>
+        <script type="text/javascript">
+                //$(function () {
+                //    
+                //    $('.datepicker').datepicker({
+                //        todayHighlight: true
+                //    });
+                //});
+
+            //(function ($) {
+            
+            //    $.validator.unobtrusive.adapters.add("mandatory", function (options) {
+            //        options.rules["required"] = true;
+            //        if (options.message) {
+            //            options.messages["required"] = options.message;
+            //        }
+            //    });
+            //}(jQuery));
+
+            //(function ($) {
+            //    $.validator.unobtrusive.adapters.addBool("mandatory", "required");
+            //}());
+
+        </script>
+    </div>
+}

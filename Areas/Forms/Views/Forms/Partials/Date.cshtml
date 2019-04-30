@@ -1,0 +1,41 @@
+﻿@model FormFieldModel
+
+<div class="group">
+
+
+    @{
+        Dictionary<string, object> htmlAttributes = new Dictionary<string, object>();
+        htmlAttributes.Add("placeholder", Model.Label);
+        htmlAttributes.Add("class", "form-control");
+        htmlAttributes.Add("data-val", "true");
+
+        if (Model.Required == "Yes")
+        {
+            htmlAttributes.Add("data-val-required", Model.RequiredError);
+        }
+
+        if (!string.IsNullOrEmpty(Model.ValidationRegex))
+        {
+            htmlAttributes.Add("data-val-regex-pattern", Model.ValidationRegex);
+            htmlAttributes.Add("data-val-regex", Model.ValidationError);
+        }
+
+    }
+    
+    @*<div class="input-group date" data-provide="datepicker">*@
+    <div class="input-group date" data-provide="datepicker">
+        <span class="input-group-addon">
+            <i class="fa fa-calendar">
+            </i>
+        </span>
+        <span class="highlight"></span>
+        <span class="bar"></span>
+        <label for="@Model.Name">@Model.Label</label>
+        @Html.TextBox(Model.Name, Model.Value, htmlAttributes)
+        @*<input class="form-control datepicker" type="text" />*@
+    </div>
+    @Html.ValidationMessageCustom(Model.Name)
+
+    
+</div>
+

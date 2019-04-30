@@ -1,0 +1,130 @@
+﻿
+@model DXA.Modules.Forms.Areas.Forms.Models.FormCollectionModel
+@using System.Configuration;
+@{
+    Layout = null;
+    if (Model == null)
+    {
+        return;
+    }
+    var css = Model.CustomCSS != null ? Model.CustomCSS.Key : string.Empty;
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form">
+        <section class="row @css">
+            @if (Model.SectionTitle != null)
+            {
+
+                <article class="col-xs-12 col-sm-12 col-md-12 formHeader">
+                    <h1 @Html.DxaPropertyMarkup(() => Model.SectionTitle)>@Model.SectionTitle</h1>
+                </article>
+            }
+            @if (Model.Description != null)
+            {
+
+                <article class="col-xs-12 col-sm-12 col-md-12 textTileTop">
+                    <p @Html.DxaPropertyMarkup(() => Model.Description)>@Html.DxaRichText(Model.Description)</p>
+                </article>
+            }
+            @if (Model.AdditionalDescription != null)
+            {
+                <article class="col-xs-12 col-sm-12 col-md-12 textTileTop">
+                    <p @Html.DxaPropertyMarkup(() => Model.AdditionalDescription)>@Html.DxaRichText(Model.AdditionalDescription)</p>
+                </article>
+            }
+            @if (Model.Forms != null)
+            {
+                string tileCss = string.Empty;
+                foreach (var form in Model.Forms)
+                {
+                    tileCss = form.TileCustomCSS != null ? form.TileCustomCSS.Key : string.Empty;
+                    if (form.FormFields != null)
+                    {
+                        var formCss = form.FormCustomCSS != null ? form.FormCustomCSS.Key : string.Empty;
+                        <article class="col-xs-12 col-sm-12 col-md-6 @formCss">
+                            @if (form.Heading != null)
+                            {
+                                <h1 @Html.DxaPropertyMarkup(() => form.Heading)>@form.Heading</h1>
+                            }
+                            @if (form.Subheading != null)
+                            {
+                                <p @Html.DxaPropertyMarkup(() => form.Subheading)>
+                                    @Html.DxaRichText(form.Subheading)
+                                </p>
+                            }
+
+                            @foreach (var field in form.FormFields)
+                            {
+
+                                switch (field.FieldType)
+                                {
+                                    case FieldType.Text:
+                                        @Html.Partial("Partials/Text", field);
+                                        break;
+
+                                    case FieldType.TextArea:
+                                        @Html.Partial("Partials/TextArea", field);
+                                        break;
+
+                                    case FieldType.DropDown:
+                                        @Html.Partial("Partials/DropDown", field);
+                                        break;
+
+                                    case FieldType.CheckBox:
+                                        @Html.Partial("Partials/CheckBox", field);
+                                        break;
+
+                                    case FieldType.RadioButton:
+                                        @Html.Partial("Partials/RadioButton", field);
+                                        break;
+
+                                    case FieldType.Date:
+                                        @Html.Partial("Partials/Date", field);
+                                        break;
+                                }
+                            }
+
+
+
+                        </article>
+                    }
+                    else
+                    {
+
+                        <article class="col-xs-12 col-sm-12 col-md-6 @tileCss">
+                            @if (form.Heading != null)
+                            {
+                                <h1 @Html.DxaPropertyMarkup(() => form.Heading)>@form.Heading</h1>
+                            }
+                            @if (form.Description != null)
+                            {
+                                <p>
+                                    @Html.DxaRichText(form.Description)
+                                </p>
+                            }
+                        </article>
+                    }
+
+                }
+                <article class="col-xs-12 col-sm-12 col-md-6 btnTile">
+                    @*Render the button in the last form*@
+
+                    @if (Model.EnableRecaptcha != null && string.Compare(Model.EnableRecaptcha, "Enable") == 0)
+                    {
+                        <div class="g-recaptcha recaptchaMsg" data-type="auto" data-callback="verifyCallback" data-sitekey="@WebRequestContext.Localization.GetConfigValue("core.recaptchaSiteKey")">
+
+                        </div>
+                        <div id="dvMessage" class="recaptchaMsg text-danger">
+                            @ViewBag.Message
+                        </div>
+                    }
+
+                    <button type="submit" id="btnSubmit" class="btn btn-default">@Model.SubmitButtonLabel</button>
+                </article>
+            }
+
+        </section>
+    </div>
+}
